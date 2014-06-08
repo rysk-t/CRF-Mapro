@@ -17,7 +17,11 @@ public class mapro extends PApplet {
 int dispW = 1920;
 int dispH = 1200;
 float bias = 1;
+int orbias = 0;
+int wnN = 10;
+int wnB = 5;
 char modeNo = '1';
+
 char curMode = '1';
 
 public void setup() 
@@ -36,7 +40,7 @@ public void draw()
   float rate = frameRate;
 
   int wnW  = 50;  int wnH  = 50;
-  int wnN = 128;  int wnB = 5;
+ 
   boolean evt = false;
 
   // disp Values  
@@ -62,10 +66,10 @@ public void draw()
       randomDot(PApplet.parseInt(wnW*bias), PApplet.parseInt(wnH*bias), wnN, wnB);
       break;
     case '2':
-      randomBar(PApplet.parseInt(wnW*bias), PApplet.parseInt(wnH*bias), wnN/2, 100, 10, 60);
+      randomBar(PApplet.parseInt(wnW*bias), PApplet.parseInt(wnH*bias), wnN/2, 10*wnB, 1*wnB, 45+orbias*10);
       break;  
     case '3':
-      randomDotCirc(100, wnN, wnB);
+      randomDotCirc(PApplet.parseInt(wnW*bias), wnN, wnB);
     case 'l':
       line(mouseX+10,mouseY+10, mouseX, mouseY);
       break;
@@ -75,8 +79,42 @@ public void draw()
       break;  
   }
 
-//  bias = changeSize(bias);
-  println(noise(1));
+  switch (getConfKey()) {
+    case 'o' :
+      orbias += 1;
+      break;  
+    case 'b' :
+      bias += 0.1f;
+      if (PApplet.parseInt(wnW*bias) > 2048){
+        bias = 1;
+      }
+      println("bias: "+bias);
+      break;
+    case 's' :
+      bias -=0.1f;
+      break;
+    case 'n' :
+      wnN = wnN + 10;
+      if (wnN > 500) {
+        wnN = 10;
+      }
+      println("wnN: "+wnN);
+      break;
+    case 'd':
+      wnB = PApplet.parseInt(wnB*1.5f);
+      if (wnB > wnW*bias) {
+        wnB = 2; 
+      }
+      break;
+    case 'r' :
+      bias = 1;
+      orbias = 0;
+      wnN = 10;
+      wnB = 5;
+      break;
+
+  }
+
 }
 
 public void randomDot(int wnW, int wnH, int wnN, int wnB){
@@ -120,6 +158,7 @@ public void randomDotCirc(int wnR, int wnN, int wnB){
 
 public void randomBar(int wnW, int wnH, int wnN, int bLen, int bWid, int orientation){
   float nx, ny = 0;
+  float orad = orientation * PI/180;
   for (int i = 0; i < wnN; i=i+1) {
     nx = random(-wnW, wnW);
     ny = random(-wnH, wnH);
@@ -133,20 +172,16 @@ public void randomBar(int wnW, int wnH, int wnN, int bLen, int bWid, int orienta
     }
     //rotate(orientation*PI/180, mouseX, mouseY, 0);
     //rect(mouseX + (nx), mouseY +(ny), bLen, bWid);
-    float rx = mouseX + nx - wnW;
-    float ry = mouseY + ny - wnH;
-    float orad = orientation * PI/180;
+
+    float rx = mouseX + nx - 0.5f*cos(orad)*bLen;
+    float ry = mouseY + ny - 0.5f*sin(orad)*bLen;
+
     quad(rx, ry, 
       rx+cos(orad)*bLen, ry+sin(orad)*bLen, 
       rx+sin(orad)*bWid+cos(orad)*bLen, ry-cos(orad)*bWid+sin(orad)*bLen, 
       rx+sin(orad)*bWid, ry-cos(orad)*bWid);
-    text(str(rx+cos(orad)*bLen), 100,100);
   }
-
-
 }
-
-
 
 public char getModeNo(){
   if (keyPressed) {
@@ -161,6 +196,15 @@ public char getModeNo(){
     }
   }
   return modeNo;
+}
+
+public char getConfKey(){
+  char confKey = '^';
+  if (keyPressed) {
+    confKey = PApplet.parseChar(key);
+    println("key: "+key);
+  }
+  return confKey;
 }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "mapro" };
