@@ -1,26 +1,10 @@
-import processing.core.*; 
-import processing.data.*; 
-import processing.event.*; 
-import processing.opengl.*; 
-
-import java.util.HashMap; 
-import java.util.ArrayList; 
-import java.io.File; 
-import java.io.BufferedReader; 
-import java.io.PrintWriter; 
-import java.io.InputStream; 
-import java.io.OutputStream; 
-import java.io.IOException; 
-
-public class mapro extends PApplet {
-
 int dispW = 1920;
 int dispH = 1200;
 float bias = 1;
 char modeNo = '1';
 char curMode = '1';
 
-public void setup() 
+void setup() 
 {
   frameRate(30);
   size(dispW, dispH); 
@@ -30,7 +14,7 @@ public void setup()
 
 }
 
-public void draw() 
+void draw() 
 {   
   background(128); 
   float rate = frameRate;
@@ -59,10 +43,10 @@ public void draw()
 
   switch (modeNo) {
     case '1':
-      randomDot(PApplet.parseInt(wnW*bias), PApplet.parseInt(wnH*bias), wnN, wnB);
+      randomDot(int(wnW*bias), int(wnH*bias), wnN, wnB);
       break;
     case '2':
-      randomBar(PApplet.parseInt(wnW*bias), PApplet.parseInt(wnH*bias), wnN/2, 100, 10, 60);
+      randomBar(int(wnW*bias), int(wnH*bias), wnN/2, 100, 10, 60);
       break;  
     case '3':
       randomDotCirc(100, wnN, wnB);
@@ -79,7 +63,7 @@ public void draw()
   println(noise(1));
 }
 
-public void randomDot(int wnW, int wnH, int wnN, int wnB){
+void randomDot(int wnW, int wnH, int wnN, int wnB){
   float nx, ny = 0;
 
   for (int i = 0; i < wnN; i=i+1) {
@@ -99,7 +83,7 @@ public void randomDot(int wnW, int wnH, int wnN, int wnB){
 
 }
 
-public void randomDotCirc(int wnR, int wnN, int wnB){
+void randomDotCirc(int wnR, int wnN, int wnB){
   float nx, ny = 0;
 
   for (int i = 0; i < wnN; i=i+1) {
@@ -118,7 +102,7 @@ public void randomDotCirc(int wnR, int wnN, int wnB){
   }
 }
 
-public void randomBar(int wnW, int wnH, int wnN, int bLen, int bWid, int orientation){
+void randomBar(int wnW, int wnH, int wnN, int bLen, int bWid, int orientation){
   float nx, ny = 0;
   for (int i = 0; i < wnN; i=i+1) {
     nx = random(-wnW, wnW);
@@ -148,7 +132,7 @@ public void randomBar(int wnW, int wnH, int wnN, int bLen, int bWid, int orienta
 
 
 
-public char getModeNo(){
+char getModeNo(){
   if (keyPressed) {
     if (key == '1'){
       modeNo = '1';
@@ -161,13 +145,4 @@ public char getModeNo(){
     }
   }
   return modeNo;
-}
-  static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "mapro" };
-    if (passedArgs != null) {
-      PApplet.main(concat(appletArgs, passedArgs));
-    } else {
-      PApplet.main(appletArgs);
-    }
-  }
 }
