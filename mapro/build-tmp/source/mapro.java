@@ -20,6 +20,9 @@ float bias = 1;
 int orbias = 0;
 int wnN = 10;
 int wnB = 5;
+int bLen = 500;
+int bWid = 100;
+boolean defCont = true;
 char modeNo = '1';
 
 char curMode = '1';
@@ -28,7 +31,6 @@ public void setup()
 {
   frameRate(30);
   size(dispW, dispH); 
-  //noStroke();
 //  noCursor();
   rectMode(CENTER);
 
@@ -70,8 +72,9 @@ public void draw()
       break;  
     case '3':
       randomDotCirc(PApplet.parseInt(wnW*bias), wnN, wnB);
-    case 'l':
-      line(mouseX+10,mouseY+10, mouseX, mouseY);
+      break;
+    case '4':
+      simpleBar(bLen, bWid, 45+orbias*10, defCont);
       break;
     case 'N':
       break;
@@ -170,8 +173,6 @@ public void randomBar(int wnW, int wnH, int wnN, int bLen, int bWid, int orienta
       fill(0, 255);
       stroke(0, 255);
     }
-    //rotate(orientation*PI/180, mouseX, mouseY, 0);
-    //rect(mouseX + (nx), mouseY +(ny), bLen, bWid);
 
     float rx = mouseX + nx - 0.5f*cos(orad)*bLen;
     float ry = mouseY + ny - 0.5f*sin(orad)*bLen;
@@ -182,6 +183,29 @@ public void randomBar(int wnW, int wnH, int wnN, int bLen, int bWid, int orienta
       rx+sin(orad)*bWid, ry-cos(orad)*bWid);
   }
 }
+
+
+public void simpleBar(int bLen, int bWid, int orientation, boolean cont) {
+  float orad = orientation * PI/180;
+  println("orientation: "+orientation);
+  println("orad: "+orad);
+  float rx = mouseX-0.5f*(sin(orad)*bWid+cos(orad)*bLen); 
+  float ry = mouseY-0.5f*(-1*sin(orad)*bLen+cos(orad)*bWid);
+
+  if (cont) {
+    fill(255, 255);
+    stroke(255, 255);
+  } else {
+    fill(0, 255);
+    stroke(0, 255);
+  }
+
+  quad(rx, ry, 
+      rx+cos(orad)*bLen, ry-sin(orad)*bLen, 
+      rx+sin(orad)*bWid+cos(orad)*bLen, ry-sin(orad)*bLen+cos(orad)*bWid,
+      rx+sin(orad)*bWid, ry+cos(orad)*bWid);
+}
+
 
 public char getModeNo(){
   if (keyPressed) {
@@ -194,6 +218,9 @@ public char getModeNo(){
     if (key == '3'){
       modeNo = '3';
     }
+    if (key == '4'){
+      modeNo = '4';
+    }
   }
   return modeNo;
 }
@@ -202,12 +229,15 @@ public char getConfKey(){
   char confKey = '^';
   if (keyPressed) {
     confKey = PApplet.parseChar(key);
-    println("key: "+key);
   }
   return confKey;
 }
+
+public void mousePressed() {
+  defCont = !defCont;
+}
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "mapro" };
+    String[] appletArgs = new String[] { "--full-screen", "--bgcolor=#666666", "--stop-color=#cccccc", "mapro" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {

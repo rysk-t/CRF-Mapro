@@ -4,6 +4,9 @@ float bias = 1;
 int orbias = 0;
 int wnN = 10;
 int wnB = 5;
+int bLen = 500;
+int bWid = 100;
+boolean defCont = true;
 char modeNo = '1';
 
 char curMode = '1';
@@ -12,7 +15,6 @@ void setup()
 {
   frameRate(30);
   size(dispW, dispH); 
-  //noStroke();
 //  noCursor();
   rectMode(CENTER);
 
@@ -54,8 +56,9 @@ void draw()
       break;  
     case '3':
       randomDotCirc(int(wnW*bias), wnN, wnB);
-    case 'l':
-      line(mouseX+10,mouseY+10, mouseX, mouseY);
+      break;
+    case '4':
+      simpleBar(bLen, bWid, 45+orbias*10, defCont);
       break;
     case 'N':
       break;
@@ -154,8 +157,6 @@ void randomBar(int wnW, int wnH, int wnN, int bLen, int bWid, int orientation){
       fill(0, 255);
       stroke(0, 255);
     }
-    //rotate(orientation*PI/180, mouseX, mouseY, 0);
-    //rect(mouseX + (nx), mouseY +(ny), bLen, bWid);
 
     float rx = mouseX + nx - 0.5*cos(orad)*bLen;
     float ry = mouseY + ny - 0.5*sin(orad)*bLen;
@@ -166,6 +167,29 @@ void randomBar(int wnW, int wnH, int wnN, int bLen, int bWid, int orientation){
       rx+sin(orad)*bWid, ry-cos(orad)*bWid);
   }
 }
+
+
+void simpleBar(int bLen, int bWid, int orientation, boolean cont) {
+  float orad = orientation * PI/180;
+  println("orientation: "+orientation);
+  println("orad: "+orad);
+  float rx = mouseX-0.5*(sin(orad)*bWid+cos(orad)*bLen); 
+  float ry = mouseY-0.5*(-1*sin(orad)*bLen+cos(orad)*bWid);
+
+  if (cont) {
+    fill(255, 255);
+    stroke(255, 255);
+  } else {
+    fill(0, 255);
+    stroke(0, 255);
+  }
+
+  quad(rx, ry, 
+      rx+cos(orad)*bLen, ry-sin(orad)*bLen, 
+      rx+sin(orad)*bWid+cos(orad)*bLen, ry-sin(orad)*bLen+cos(orad)*bWid,
+      rx+sin(orad)*bWid, ry+cos(orad)*bWid);
+}
+
 
 char getModeNo(){
   if (keyPressed) {
@@ -178,6 +202,9 @@ char getModeNo(){
     if (key == '3'){
       modeNo = '3';
     }
+    if (key == '4'){
+      modeNo = '4';
+    }
   }
   return modeNo;
 }
@@ -186,7 +213,10 @@ char getConfKey(){
   char confKey = '^';
   if (keyPressed) {
     confKey = char(key);
-    println("key: "+key);
   }
   return confKey;
+}
+
+void mousePressed() {
+  defCont = !defCont;
 }
