@@ -1,19 +1,16 @@
-int dispW = 1920;
-int dispH = 1200;
-float bias = 1;
+float biasH = 1;  float biasW = 1;
+int dispW = 1920;  int dispH = 1200;
 int orbias = 0;
-int wnN = 10;
-int wnB = 5;
-int bLen = 500;
-int bWid = 100;
+int wnN = 10; int wnB = 5;
+int bLen = 50;  int bWid = 10;
+int wnW  = 10;  int wnH  = 10;
 boolean defCont = true;
 char modeNo = '1';
-
 char curMode = '1';
 
 void setup() 
 {
-  frameRate(30);
+  frameRate(25);
   size(dispW, dispH); 
 //  noCursor();
   rectMode(CENTER);
@@ -25,7 +22,7 @@ void draw()
   background(128); 
   float rate = frameRate;
 
-  int wnW  = 50;  int wnH  = 50;
+
  
   boolean evt = false;
 
@@ -49,16 +46,16 @@ void draw()
 
   switch (modeNo) {
     case '1':
-      randomDot(int(wnW*bias), int(wnH*bias), wnN, wnB);
+      randomDot(int(wnW*biasW), int(wnH*biasH), wnN, wnB);
       break;
     case '2':
-      randomBar(int(wnW*bias), int(wnH*bias), wnN/2, 10*wnB, 1*wnB, 45+orbias*10);
+      randomBar(int(wnW*biasW), int(wnH*biasH), wnN/2, 10*wnB, 1*wnB, 45+orbias*10);
       break;  
     case '3':
-      randomDotCirc(int(wnW*bias), wnN, wnB);
+      randomDotCirc(int(wnW*biasW), wnN, wnB);
       break;
     case '4':
-      simpleBar(bLen, bWid, 45+orbias*10, defCont);
+      simpleBar(int(bLen*biasH), int(bWid*biasW), 45+orbias*10, defCont);
       break;
     case 'N':
       break;
@@ -71,14 +68,18 @@ void draw()
       orbias += 1;
       break;  
     case 'b' :
-      bias += 0.1;
-      if (int(wnW*bias) > 2048){
-        bias = 1;
+      biasW += 0.1;
+      biasH += 0.1;
+      if (int(wnW*biasW) > 4000 || int(wnW*biasW) > 4000 ){
+        biasW = 1;
+        biasH = 1;
+        println("loop!");
       }
-      println("bias: "+bias);
+      println("biasW: "+biasW);
       break;
     case 's' :
-      bias -=0.1;
+      biasW -=0.1;
+      biasH -=0.1;
       break;
     case 'n' :
       wnN = wnN + 10;
@@ -89,12 +90,12 @@ void draw()
       break;
     case 'd':
       wnB = int(wnB*1.5);
-      if (wnB > wnW*bias) {
+      if (wnB > wnW*biasW) {
         wnB = 2; 
       }
       break;
     case 'r' :
-      bias = 1;
+      biasW=1; biasH = 1;
       orbias = 0;
       wnN = 10;
       wnB = 5;
@@ -219,4 +220,25 @@ char getConfKey(){
 
 void mousePressed() {
   defCont = !defCont;
+}
+
+void keyPressed(){
+/*  if (key=='w') {
+    biasW = int(biasW+1);
+  }else if (key=='h') {
+    biasH = int(biasH+1);
+   }
+   println("Press!: "+ key);
+*/
+
+  switch (key) {
+    case 'w': 
+      biasW = int(biasW+1);
+      break;
+    case 'h' :
+      biasH = int(biasH+1);
+      break;
+    default :
+      break;  
+  }
 }
