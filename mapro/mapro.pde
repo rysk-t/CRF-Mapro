@@ -10,9 +10,9 @@ char curMode = '1';
 
 void setup() 
 {
-  frameRate(25);
+  frameRate(30);
   size(dispW, dispH); 
-//  noCursor();
+  noCursor();
   rectMode(CENTER);
 
 }
@@ -46,13 +46,13 @@ void draw()
 
   switch (modeNo) {
     case '1':
-      randomDot(int(wnW*biasW), int(wnH*biasH), wnN, wnB);
+      randomDot(int(wnW*biasW), int(wnH*biasH), wnN, wnB, false);
       break;
     case '2':
       randomBar(int(wnW*biasW), int(wnH*biasH), wnN/2, 10*wnB, 1*wnB, 45+orbias*10);
       break;  
     case '3':
-      randomDotCirc(int(wnW*biasW), wnN, wnB);
+      randomDot(int(wnW*biasW), int(wnH*biasH), wnN, wnB, true);
       break;
     case '4':
       simpleBar(int(bLen*biasH), int(bWid*biasW), 45+orbias*10, defCont);
@@ -105,43 +105,26 @@ void draw()
 
 }
 
-void randomDot(int wnW, int wnH, int wnN, int wnB){
+void randomDot(int wnW, int wnH, int wnN, int wnB, boolean isCircle){
   float nx, ny = 0;
 
   for (int i = 0; i < wnN; i=i+1) {
-
     nx = random(-wnW, wnW);
     ny = random(-wnH, wnH);
-    rect(mouseX+nx, mouseY+ny, wnB, wnB);
 
-    if ((i%2)==0) {
-      fill(255, 255);
-      stroke(255, 255);
-    } else {
-      fill(0, 255);
-      stroke(0, 255);
+    if (!isCircle | sqrt(nx * nx + ny * ny) < wnW ) {
+      rect(mouseX+nx, mouseY+ny, wnB, wnB);
+
+      if ((i%2)==0) {
+        fill(255, 255);
+        stroke(255, 255);
+      } else {
+        fill(0, 255);
+        stroke(0, 255);
+      }
     }
   }
 
-}
-
-void randomDotCirc(int wnR, int wnN, int wnB){
-  float nx, ny = 0;
-
-  for (int i = 0; i < wnN; i=i+1) {
-    float angle = random(0, 2*PI);
-    float r = random(0, wnR);
-    nx = r*cos(angle);
-    ny = r*sin(angle);
-    rect(mouseX+nx, mouseY+ny, wnB, wnB);
-    if ((i%2)==0) {
-      fill(255, 255);
-      stroke(255, 255);
-    } else {
-      fill(0, 255);
-      stroke(0, 255);
-    }
-  }
 }
 
 void randomBar(int wnW, int wnH, int wnN, int bLen, int bWid, int orientation){
