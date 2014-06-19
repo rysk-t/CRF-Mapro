@@ -1,5 +1,5 @@
 float biasH = 1;  float biasW = 1;
-int dispW = 1920;  int dispH = 1200;
+int dispW = 1280;  int dispH = 900;
 int orbias = 0;
 int wnN = 10; int wnB = 5;
 int bLen = 50;  int bWid = 10;
