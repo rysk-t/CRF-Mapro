@@ -22,6 +22,9 @@ CRF-Mapro
  - r: 刺激パラメータリセット
  - ESC: 終了
 
+# Contribution:
+ - [Aokish](https://github.com/aoksh)
+
 
 # License
 GNU GENERAL PUBLIC LICENSE
