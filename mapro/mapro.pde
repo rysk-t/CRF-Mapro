@@ -1,5 +1,5 @@
 float biasH = 1;  float biasW = 1;
-int dispW = 1280;  int dispH = 900;
+int dispW = 1920;  int dispH = 1080;
 int orbias = 0;
 int wnN = 10; int wnB = 5;
 int bLen = 50;  int bWid = 10;
@@ -31,7 +31,11 @@ void draw()
   text("   Y: "+str(mouseY-dispH/2), 10, 20);
   text(" FPS: "+str(rate), 10, 30);
   text("Mode: "+modeNo, 10, 40);
+  text("eye0: "+str(mouseX-dispW/4), 10, 50);
+  text("eye1: "+str(mouseX-3*dispW/4), 10, 60);
+  
 
+    
 
   modeNo = getModeNo();
 
